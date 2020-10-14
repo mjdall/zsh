@@ -34,7 +34,10 @@ fi
 
 RADIAN_PROFILE=""$HOME"/.radian_profile"
 if [ ! -f "$RADIAN_PROFILE" ]; then
+	# settings for Radian as VSCode R console
 	echo "options(radian.color_scheme = \"monokai\")" > "$RADIAN_PROFILE"
+	echo "options(radian.auto_match = FALSE)" >> "$RADIAN_PROFILE"
+	echo "options(radian.auto_indentation = FALSE)" >> "$RADIAN_PROFILE"
 fi
 
 # ~~~~~~~~~~~~~~~~~~
