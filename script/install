@@ -3,10 +3,10 @@ set -e
 
 cd "$(dirname $0)/.."
 
-sudo ./script/bootstrap
+# sudo ./script/bootstrap
 
 chsh -s /usr/bin/zsh
 
-echo "source $PWD/src/config.zsh" >~/.zshrc
+echo "source $PWD/src/config.zsh" > ~/.zshrc
 
 echo "Please log out and log back in"

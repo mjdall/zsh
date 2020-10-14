@@ -4,10 +4,8 @@
 # Get standard distribution info
 . /etc/os-release
 
-# NOTE: For some reason needs to go early or doesn't work
-if [ $commands[kubectl] ]; then
-	source <(kubectl completion zsh)
-fi
+# conda setup
+. /anaconda/etc/profile.d/conda.sh
 
 # ~~~~~~~~~~~~~~~~~~
 # Antigen Setup
@@ -21,7 +19,23 @@ if [ ! -f "$ANTI_FILE" ]; then
 	curl -L git.io/antigen >"$ANTI_FILE"
 fi
 
+AZ_AUTOCOMPLETES=""$HOME"/.az_auto_completion"
+if [ ! -f "$AZ_AUTOCOMPLETES" ]; then
+	curl -L https://raw.githubusercontent.com/Azure/azure-cli/dev/az.completion > "$AZ_AUTOCOMPLETES"
+	echo -e "#\!/usr/bin/env bash\n\n$(cat "$AZ_AUTOCOMPLETES")" > "$AZ_AUTOCOMPLETES"
+fi
+
 source "$ANTI_FILE"
+
+pip list | grep "radian" &> /dev/null
+if [ $? -ne 0 ]; then
+	pip install radian
+fi
+
+RADIAN_PROFILE=""$HOME"/.radian_profile"
+if [ ! -f "$RADIAN_PROFILE" ]; then
+	echo "options(radian.color_scheme = \"monokai\")" > "$RADIAN_PROFILE"
+fi
 
 # ~~~~~~~~~~~~~~~~~~
 # Antigen Config
@@ -35,17 +49,13 @@ antigen bundle command-not-found
 antigen bundle z
 antigen bundle docker-compose
 antigen bundle docker
-antigen bundle golang
 
-# External bundles
-if [ $commands[kubectl] ]; then
-	antigen bundle dbz/zsh-kubernetes
-fi
 antigen bundle djui/alias-tips
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle webyneter/docker-aliases.git
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle chrissicool/zsh-256color
+antigen bundle esc/conda-zsh-completion
 
 # Load the theme.
 antigen theme denysdovhan/spaceship-prompt
@@ -63,35 +73,20 @@ source "$(dirname $0)/vars.env"
 
 # Easy jump into a container
 alias boop="docker run --rm -it"
-alias ubuntu="boop ubuntu"
-alias centos="boop centos"
-alias debian="boop debian"
-alias alpine="boop alpine"
-alias fedora="boop fedora"
-alias suse="boop opensuse/leap bash"
-
+alias r="radian"
 alias watch-logs="dmesg -THw"
-
-alias ngot="crie --config=ngot.yml"
-
-# Git
-alias nuke="git reset --hard HEAD && git clean -xdf"
 
 # Project Init
 alias projinit="mkdir -p script && touch LICENSE README.md CONTRIBUTING.md script/test script/bootstrap"
-
-# Cmake
-alias cgraph="cmake -Bbuild -H. --graphviz=build/i.dot &&  dot -Tps build/i.dot -o graph.ps"
-alias build="cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release -GNinja && cmake --build build"
-
-# Terraform
-alias tfgraph="terraform graph | dot -Tps -o graph.ps"
 
 # vim > nano
 alias nano="echo 'stop being bad, use vim to edit: '"
 
 # Update
 alias up="_ apt update;_ apt -y full-upgrade;_ apt -y autoremove"
+
+# todo: figure out this error with complete cmd
+alias auto_az="source "$AZ_AUTOCOMPLETES""
 
 alias install-theme="mkdir -p ~/.themes \
 && wget -O /tmp/flat-gtk.zip https://github.com/daniruiz/flat-remix-gtk/archive/master.zip \
@@ -151,10 +146,6 @@ _ apt update \
 && _ snap install discord \
 && _ snap install spotify \
 && _ snap install hexchat \
-&& _ snap install --beta authy \
-&& install-gitkraken \
-&& install-megasync \
 && install-theme \
 && install-jetbrains \
 && install-notable"
-
