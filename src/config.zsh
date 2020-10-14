@@ -53,12 +53,12 @@ antigen bundle docker
 antigen bundle djui/alias-tips
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle webyneter/docker-aliases.git
-antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-completions
 antigen bundle chrissicool/zsh-256color
 antigen bundle esc/conda-zsh-completion
 
 # Load the theme.
-antigen theme denysdovhan/spaceship-prompt
+antigen theme af-magic #denysdovhan/spaceship-prompt
 
 # Tell Antigen that you're done.
 antigen apply

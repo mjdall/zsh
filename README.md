@@ -18,3 +18,7 @@ sudo -E ~/.morgan_zsh/script/bootstrap && \
 # Get tylers stuff
 # install-tyler
 ```
+
+# todo:
+* setup vscode via code https://renkun.me/2019/12/11/writing-r-in-vscode-a-fresh-start/
+* setup remote vscode via code
